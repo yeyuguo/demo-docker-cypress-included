@@ -19,10 +19,40 @@ DISPLAY=$IP:0
 #     with arguments AFTER Docker image name
 #     in our case they are "--project ." to point globally installed Cypress
 #     at the current working directory /e2e inside the container
-docker run -it \
-  -v $PWD:/e2e \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -w /e2e \
-  -e DISPLAY \
-  --entrypoint cypress \
-  cypress/included:3.4.0 open --project .
+
+
+# docker run -it \
+#   -v $PWD:/e2e \
+#   -v /tmp/.X11-unix:/tmp/.X11-unix \
+#   -w /e2e \
+#   -e DISPLAY \
+#   --entrypoint cypress \
+#   cypress/included:3.4.0 open --project .
+
+
+# docker run -it \
+#   --network host \
+#   -v $PWD:/e2e \
+#   -v /tmp/.X11-unix:/tmp/.X11-unix \
+#   -w /e2e \
+#   -e DISPLAY \
+#   --entrypoint '' \
+#   cypress/included:3.4.0 \
+#   npx cypress open
+
+# 正确能执行 npm install && xhost && ./cy-open.sh
+docker run -it --rm \
+    --network host \
+    -v ~/.Xauthority:/root/.Xauthority:ro \
+    -e DISPLAY \
+    -v $PWD:/e2e \
+    -w /e2e \
+    --entrypoint '' \
+    cypress/included:3.4.0 \
+    npx cypress open
+
+
+
+
+# 报错解决办法: (Cypress:15): Gtk-WARNING **: cannot open display: 192.168.253.2:0
+# https://stackoverflow.com/questions/59514234/viewing-the-interactive-cypress-test-runner-in-docker-on-linux
