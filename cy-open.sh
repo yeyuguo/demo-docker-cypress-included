@@ -48,8 +48,9 @@ docker run -it --rm \
     -v $PWD:/e2e \
     -w /e2e \
     --entrypoint '' \
-    cypress/included:3.4.0 \
+    cypress/included:6.2.1 \
     npx cypress open
+    # npx cypress cache clear && npx cypress open
 
 
 
